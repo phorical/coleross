@@ -1,0 +1,91 @@
+body {
+	background: black;
+}
+
+
+h1 {
+
+	text-align: center;
+	color: white;
+	font-family: 'Raleway', sans-serif;
+}
+
+h2 {
+	font-family: 'Raleway', sans-serif;
+	text-align: center;
+	color: white;
+}
+img {
+	display: block;
+	margin: 0 auto;
+	box-shadow: 0px 0px 50px #808080;
+	object-fit: cover;
+//	max-height:500px;
+//	max-width:500px;
+}
+
+p {
+	font-family: 'Raleway', sans-serif;
+	tex-align: center;
+	color: white;
+}
+
+label {
+	font-family: 'Raleway', sans-serif;
+	text-align: center;
+	color: white;
+}
+
+form {
+	font-family: 'Raleway', sans-serif;
+	text-align: center;
+	color: white;
+	border: 0px;
+}
+
+.black_text{
+	color: black;
+}
+
+div.align_center {
+	margin: 25px auto;
+	width: 640px;
+}
+
+iframe {
+	border: 0px;
+}
+fieldset{
+	border: 0px;
+}
+
+.imageLink {
+	margin: 0 auto;
+}
+
+.button {
+	background-color: black;
+	border: none;
+	color: white;
+	padding: 15px 30px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	font-family: 'Raleway', sans-serif;
+	margin: 5px 2px;
+	cursor: pointer;
+	box-shadow: 0 0 50px #808080;
+	border-radius: 10px;
+}
+.button1 {
+	border-radius: 4px;
+}
+.button2 {
+	border-radius: 10px;
+}
+.buton3 {
+	width: 20%;
+	min-width: 30px;
+	height: 50px;
+}

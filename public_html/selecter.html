@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>you shouldn't see this</title>
+<link href="styles/css.css" type="text/css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css?family=Raleway:500" rel="stylehsset"
+
+<script>
+  function setInitial(obj){
+    obj._initValue = obj.value;
+  }
+  function doSomething(obj){
+    //if you want to verify a change took place...
+    if(obj._initValue == obj.value){
+      //do nothing, no actual change occurred...
+      //or in your case if you want to make a minor update
+      doMinorUpdate();
+    } else {
+	//change happened
+	if(obj.value=="1"){
+		window.open("http://www.itunes.com","_blank");
+    }
+  }
+</script>
+
+
+<select onfocus="setInitial(this);" onclick="doSomething();" onkeypress="doSomething();">
+	<option value="-1" selected disabled>buy memoirs from the burg</option>
+	<option value="1">itunes</option>
+	<option value="2">google play</option>
+	<option value="3">here</option>
+</select>

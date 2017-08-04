@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>cole ross</title>
+<link href="styles\css.css" type="text/css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css?family=Raleway:500" rel="stylesheet">
+
+<script>
+var image = '';
+
+function init(){
+	var images = 5;
+	var image_numbers = Math.floor(Math.random(1) * images) + 1;
+	image = 'http://coleross.com/images/coleross/coleross' + image_numbers + '.jpg';
+	document.getElementById("cover").src=image;
+} 
+function hover(element) {
+    element.src='http://coleross.com/images/memoirs.jpg';
+}
+function unhover(element) {
+	element.src=image;
+}
+function itunes() {
+	var link = 'http://itunes.com';
+	window.open(link, "_blank");
+}
+</script>
+
+</head>
+
+<body onload="init();">
+	<h1> cole ross </h1>
+	<h2 class="black_text"> memoirs from the burg </h2>
+
+<a class="imageLink" href="https://soundcloud.com/ryan-cole-ross/sets/memoirs-from-the-burg">
+<img id="cover" style="border: 0;" width="640" height="640" onmouseleave="unhover(this);" onmouseover="hover(this);" src="/images/memoirs.jpg" />
+</a>
+<select name="ab" onchange="if (this.selectedIndex) itunes();">
+    <option value="-1">--</option>
+    <option value="1">option 1</option> 
+    <option value="2">option 2</option>
+    <option value="3">option 3</option>
+</select>
+
+
+<div class="align_center">
+<select>
+  <option selected disabled>Select</option>
+  <option value="http://itunes.com" onselect="itunes()">itunes</option>
+  <option value="saab">Saab</option>
+  <option value="mercedes">Mercedes</option>
+  <option value="audi">Audi</option>
+</select>
+
+<iframe src="manage.php" width="640px" height="200px" />
+</div>
+
+</body>
+</html>
