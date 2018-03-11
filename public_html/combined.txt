@@ -1,0 +1,307 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>cole ross</title>
+<link href="styles\css.css" type="text/css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css?family=Raleway:500" rel="stylesheet">
+<script type="text/javascript">
+var image = '';
+
+function init(){
+	var images = 5;
+	var image_numbers = Math.floor(Math.random(1) * images) + 1;
+	image = 'http://coleross.com/images/coleross/coleross' + image_numbers + '.jpg';
+	document.getElementById("cover").src=image;
+} 
+function hover(element) {
+    element.src='http://coleross.com/images/memoirs.jpg';
+}
+function unhover(element) {
+	element.src=image;
+}
+</script>
+
+
+</head>
+
+<body onload="init();">
+	<h1> cole ross </h1>
+	<h2 class="black_text"> memoirs from the burg </h2>
+
+<!--	<a class="imageLink" href="https://soundcloud.com/ryan-cole-ross/sets/memoirs-from-the-burg">
+	-->	<img id="cover" style="border: 0;" width="640" height="640" onmouseleave="unhover(this);" onmouseover="hover(this);" src="/images/memoirs.jpg" />
+	<!-- </a> -->
+	<div id="button-container">
+	 <p class="min">buy on:</p>
+	  <div class="half-width">
+		<a href="http://geo.itunes.apple.com/us/album/memoirs-from-the-burg/id1265964454?app=itunes" class="button buy-button black-text">itunes</a>
+	  </div><div class="half-width">
+		<a href="https://play.google.com/store/music/album/Cole_Ross_Memoirs_from_the_Burg?id=Bswkowxflxjb7oodrgkini5wvhq" class="button buy-button black-text">google play</a>
+	  </div>
+	<p class="min">stream on:</p>
+	  <div class="third-width">
+		<a href="https://open.spotify.com/album/1Sus8cCHUsPkEOtbx67gGm" class="button stream-button white-text">spotify</a>
+	  </div><div class="third-width">		
+		<a href="https://tidal.com/album/76915271" class="button stream-button white-text">tidal</a>
+	  </div><div class="third-width">
+		<a href="https://soundcloud.com/ryan-cole-ross/sets/memoirs-from-the-burg" class="button stream-button white-text">soundcloud</a>
+	  </div><div id="two-thirds"><div class="half-width">
+		<a href="http://geo.itunes.apple.com/us/album/memoirs-from-the-burg/id1265964454?mt=1&app=music" class="button stream-button white-text">apple music</a>
+	  </div><div class="half-width">
+		<a href="https://play.google.com/music/listen?u=0#/album/Bswkowxflxjb7oodrgkini5wvhq/Cole+Ross/Memoirs+from+the+Burg" class="button stream-button white-text">google play</a>
+	  </div></div>
+
+<iframe src="manage.php" width="500px" height="200px" />
+</div>
+</div>
+</body>
+</html>
+<?php
+//function to connect to db
+function doDB() {
+	global $mysqli;
+	//load configuration for u/pw
+	$config = parse_ini_file('../config.ini');
+
+	//try to connect to db
+	$mysqli = mysqli_connect('localhost',$config['username'],$config['password'],$config['dbname']);
+
+	if (mysqli_connect_errno()) {
+		printf("Connect failed: %s\n", mysqli_connect_error());
+		exit();
+	}
+}
+//function to check email address
+function emailChecker($email) {
+	global $mysqli, $safe_email, $check_res;
+
+	//check that email is not already in list
+	$safe_email = mysqli_real_escape_string($mysqli, $email);
+	$check_sql = "SELECT id FROM subscribers WHERE email = '".$safe_email."'";
+	$check_res = mysqli_query($mysqli, $check_sql)
+		or die(mysqli_error($mysqli));
+}
+
+?>
+
+
+
+
+<?php
+include 'mailing_list.php';
+//determine if they need to see the form or not
+if (!$_POST) {
+    //they need to see the form, so create form block
+   $display_block = <<<END_OF_BLOCK
+   <form method="POST" action="$_SERVER[PHP_SELF]">
+
+   <p class="min"><label for="email">subscribe to newsletter:</label><br/>
+   <input type="email" id="email" name="email"
+          size="40" maxlength="150" placeholder="email address"/></p>
+
+   <button type="submit" name="submit" value="submit">subscribe</button>
+   </form>
+END_OF_BLOCK;
+} else if (($_POST) && ($_POST['action'] == "submit")) {
+     //trying to subscribe; validate email address
+     if ($_POST['email'] == "") {
+         header("Location: manage.php");
+         exit;
+     } else {
+         //connect to database
+         doDB();
+
+        //check that email is in list
+        emailChecker($_POST['email']);
+
+        //get number of results and do action
+        if (mysqli_num_rows($check_res) < 1) {
+            //free result
+            mysqli_free_result($check_res);
+
+            //add record
+            $add_sql = "INSERT INTO subscribers (email)
+                       VALUES('".$safe_email."')";
+            $add_res = mysqli_query($mysqli, $add_sql)
+                       or die(mysqli_error($mysqli));
+            $display_block = "<p>Thanks for signing up!</p>";
+
+             //close connection to MySQL
+            mysqli_close($mysqli);
+        } else {
+            //print failure message
+            $display_block = "<p>You're already subscribed!</p>";
+        }
+    }
+} else if (($_POST) && ($_POST['action'] == "unsub")) {
+    //trying to unsubscribe; validate email address
+    if ($_POST['email'] == "") {
+        header("Location: manage.php");
+        exit;
+    } else {
+        //connect to database
+        doDB();
+
+        //check that email is in list
+        emailChecker($_POST['email']);
+
+        //get number of results and do action
+        if (mysqli_num_rows($check_res) < 1) {
+            //free result
+            mysqli_free_result($check_res);
+
+            //print failure message
+            $display_block = "<p>Couldn't find your address!</p>
+            <p>No action was taken.</p>";
+        } else {
+            //get value of ID from result
+            while ($row = mysqli_fetch_array($check_res)) {
+                $id = $row['id'];
+            }
+
+            //unsubscribe the address
+            $del_sql = "DELETE FROM subscribers
+                        WHERE id = ".$id;
+            $del_res = mysqli_query($mysqli, $del_sql)
+                       or die(mysqli_error($mysqli));
+            $display_block = "<p>You're unsubscribed!</p>";
+        }
+        mysqli_close($mysqli);
+    }
+}
+?>
+<!DOCTYPE html>
+<html>
+<head>
+<title>Subscribe/Unsubscribe to a Mailing List</title>
+<link href="styles/css.css" type="text/css" rel="stylesheet" /> 
+<link href="https://fonts.googleapis.com/css?family=Raleway:500" rel="stylesheet" />
+</head>
+<body>
+
+<?php echo "$display_block"; ?>
+</body>
+</html>
+body {
+	background: black;
+}
+
+
+h1 {
+
+	text-align: center;
+	color: white;
+	font-family: 'Raleway', sans-serif;
+}
+
+h2 {
+	font-family: 'Raleway', sans-serif;
+	text-align: center;
+	color: white;
+}
+img {
+	display: block;
+	margin: 0 auto;
+	box-shadow: 0px 0px 50px #808080;
+	object-fit: cover;
+	max-height:500px;
+	max-width:500px;
+}
+
+p {
+	font-family: 'Raleway', sans-serif;
+	text-align: center;
+	color: white;
+}
+p.min {
+	margin: 0;
+}
+
+label {
+	font-family: 'Raleway', sans-serif;
+	text-align: center;
+	color: white;
+}
+
+form {
+	font-family: 'Raleway', sans-serif;
+	text-align: center;
+	color: white;
+	border: 0px;
+}
+.white-text{
+	color: white;
+}
+.black-text{
+	color: black;
+}
+
+div.align_center {
+	margin: 25px auto;
+	width: 500px;
+}
+
+iframe {
+	border: 0px;
+}
+fieldset{
+	border: 0px;
+}
+
+.imageLink {
+	margin: 0 auto;
+}
+
+.button {
+	border: none;
+	padding: 15px 28px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	font-family: 'Raleway', sans-serif;
+	margin: 5px 2px;
+	cursor: pointer;
+	border-radius: 10px;
+}
+.buy-button {
+	font-color: black;
+	background-color: #e1e1e1;
+	max-width: 100%;
+	width: 190px;
+}
+.half-width {
+	display: inline-block;
+	width:50%;
+}
+.third-width {
+	display: inline-block;
+	width:33%;
+}
+.stream-button {
+	font-color: white;
+	background-color: #29332c;
+	width: 105px;
+	max-width: 100%;
+}
+#two-thirds {
+	margin: auto;
+	width: 66%;
+}
+#button-container {
+	margin: auto;
+	padding: 10px;
+	width: 500px;
+	min-height: 200px;
+}
+.buton3 {
+	width: 20%;
+	min-width: 30px;
+	height: 50px;
+}
+
+.link {
+	background-color: white;	
+	height: 50px;
+}
