@@ -1,22 +1,15 @@
 <?php
 include 'mailing_list.php';
+
+$display_block = "";
+
 //determine if they need to see the form or not
-if (!$_POST) {
-    //they need to see the form, so create form block
-   $display_block = <<<END_OF_BLOCK
-   <form method="POST" action="$_SERVER[PHP_SELF]">
-
-   <p class="min"><label for="email">subscribe to newsletter:</label><br/>
-   <input type="email" id="email" name="email"
-          size="40" maxlength="150" placeholder="email address"/></p>
-
-   <button type="submit" name="submit" value="submit">subscribe</button>
-   </form>
-END_OF_BLOCK;
-} else if (($_POST) && ($_POST['action'] == "submit")) {
+if (isset($_POST['submit'])) {
      //trying to subscribe; validate email address
      if ($_POST['email'] == "") {
-         header("Location: manage.php");
+         $display_block = <<<EOB
+<p class="min">must enter email address</p>"
+EOB;
          exit;
      } else {
          //connect to database
@@ -35,13 +28,17 @@ END_OF_BLOCK;
                        VALUES('".$safe_email."')";
             $add_res = mysqli_query($mysqli, $add_sql)
                        or die(mysqli_error($mysqli));
-            $display_block = "<p>Thanks for signing up!</p>";
-
+            $display_block = <<<EOB
+<p class="min">thanks for signing up</p><p class="min">follow cole ross on <a class="white-text" href="https://twitter.com/rrosstheboss">twitter</a></p>
+EOB;
              //close connection to MySQL
             mysqli_close($mysqli);
         } else {
             //print failure message
-            $display_block = "<p>You're already subscribed!</p>";
+            $display_block = <<<EOB
+<p class="min">already on the list</p>
+<p class="min">follow cole ross on <a class="white-text" href="https://twitter.com/rrosstheboss">twitter</a></p>
+EOB;
         }
     }
 } else if (($_POST) && ($_POST['action'] == "unsub")) {
@@ -89,7 +86,15 @@ END_OF_BLOCK;
 <link href="https://fonts.googleapis.com/css?family=Raleway:500" rel="stylesheet" />
 </head>
 <body>
+   <form method="POST" action="<?php echo htmlentities($_SERVER[PHP_SELF]); ?>">
 
+   <p class="min"><label for="email">subscribe to newsletter:</label><br/>
+   <input type="email" id="email" name="email"
+          size="40" maxlength="150" placeholder="email address"/></p>
+
+   <button type="submit" name="submit" value="submit">subscribe</button>
+   </form>
+E
 <?php echo "$display_block"; ?>
 </body>
 </html>

@@ -1,15 +1,12 @@
 body {
 	background: black;
 }
-
-
 h1 {
 
 	text-align: center;
 	color: white;
 	font-family: 'Raleway', sans-serif;
 }
-
 h2 {
 	font-family: 'Raleway', sans-serif;
 	text-align: center;
@@ -18,12 +15,20 @@ h2 {
 img {
 	display: block;
 	margin: 0 auto;
-	box-shadow: 0px 0px 50px #808080;
-	object-fit: cover;
 	max-height:500px;
 	max-width:500px;
 }
-
+#cover {
+	box-shadow: 0px 0px 50px #808080;	
+}
+.twitter-container {
+	margin: auto;
+	max-width: 30px;
+	width: 25%;
+}
+.twitter-image {
+	width: 100%;
+}
 p {
 	font-family: 'Raleway', sans-serif;
 	text-align: center;
@@ -32,13 +37,6 @@ p {
 p.min {
 	margin: 0;
 }
-
-label {
-	font-family: 'Raleway', sans-serif;
-	text-align: center;
-	color: white;
-}
-
 form {
 	font-family: 'Raleway', sans-serif;
 	text-align: center;
@@ -51,23 +49,19 @@ form {
 .black-text{
 	color: black;
 }
-
 div.align_center {
 	margin: 25px auto;
 	width: 500px;
 }
-
 iframe {
 	border: 0px;
 }
 fieldset{
 	border: 0px;
 }
-
 .imageLink {
 	margin: 0 auto;
 }
-
 .button {
 	border: none;
 	padding: 15px 28px;
@@ -109,14 +103,4 @@ fieldset{
 	padding: 10px;
 	width: 500px;
 	min-height: 200px;
-}
-.buton3 {
-	width: 20%;
-	min-width: 30px;
-	height: 50px;
-}
-
-.link {
-	background-color: white;	
-	height: 50px;
 }
