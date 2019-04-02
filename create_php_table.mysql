@@ -1,0 +1,15 @@
+GRANT ALL PRIVILEGES ON *.* FOR 'php'@'localhost' IDENTIFIED BY 'BatmanBegins';
+CREATE DATABASE IF NOT EXISTS mail_list;
+
+USE mail_list;
+
+DROP TABLE IF EXISTS subscribers;
+
+CREATE TABLE IF NOT EXISTS subscribers (
+  id INT AUTO_INCREMENT,
+  email VARCHAR(255),
+  subscribed_date DATETIME,
+  updated_date DATETIME,
+  notes VARCHAR(255),
+  PRIMARY KEY (id)
+);

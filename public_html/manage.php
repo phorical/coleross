@@ -24,8 +24,8 @@ EOB;
             mysqli_free_result($check_res);
 
             //add record
-            $add_sql = "INSERT INTO subscribers (email)
-                       VALUES('".$safe_email."')";
+            $add_sql = "INSERT INTO subscribers (email, subscribed_date, updated_date)
+                       VALUES('".$safe_email."', now(), now())";
             $add_res = mysqli_query($mysqli, $add_sql)
                        or die(mysqli_error($mysqli));
             $display_block = <<<EOB
@@ -94,7 +94,6 @@ EOB;
 
    <button type="submit" name="submit" value="submit">subscribe</button>
    </form>
-E
 <?php echo "$display_block"; ?>
 </body>
 </html>
